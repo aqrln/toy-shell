@@ -77,15 +77,15 @@ function removeQuotes(string) {
     }
 }
 
-function unescape(string) {
-    return string;
+function unescapeArgument(string) {
+    return string.replace('\\ ', ' ');
 }
 
 function transformArgument(arg, index) {
     return reverseCompose([
         expandTilde,
         removeQuotes,
-        unescape
+        unescapeArgument
     ])(arg);
 }
 

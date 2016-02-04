@@ -53,6 +53,18 @@ var commands = {
     'echo': function (args, callback) {
         console.log(args.slice(1).join(' '));
         callback();
+    },
+    
+    'cd': function (args, callback, error) {
+        var newLocation = args[1] || os.homedir();
+        
+        try {
+            process.chdir(newLocation);
+        } catch (exception) {
+            error(exception);
+        }
+        
+        callback();
     }
 };
 

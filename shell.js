@@ -95,8 +95,6 @@ process.stdin.on('data', function (input) {
         argv = matches.map(transformArgument),
         commandHandler = commands[argv[0]];
     
-    commandLine.match(/'.*'|".*"|((\\\s)*[^\s])+(\\\s)*/g);
-    
     if (commandHandler) {
         commandHandler.call(process, argv, onComplete, onError);
     } else {

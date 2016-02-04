@@ -48,6 +48,11 @@ var commands = {
     'whoami': function (args, callback) {
         console.log(user);
         callback();
+    },
+    
+    'echo': function (args, callback) {
+        console.log(args.slice(1).join(' '));
+        callback();
     }
 };
 

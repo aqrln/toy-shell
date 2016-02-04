@@ -57,7 +57,7 @@ var commands = {
 };
 
 function writePrompt() {
-    process.stdout.write(`${user}@${host}$ `)
+    process.stdout.write(`${user}@${host}$ `);
 }
 
 function reverseCompose(functions) {

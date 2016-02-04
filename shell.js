@@ -55,28 +55,47 @@ function writePrompt() {
     process.stdout.write(`${user}@${host}$ `)
 }
 
+function reverseCompose(functions) {
+    return function () {
+        var result = arguments;
+        functions.forEach((fn) => {
+            result = [fn.apply(this, result)];
+        });
+        return result[0];
+    }
+}
+
 function isQuote(character) {
     return '\'"'.indexOf(character) != -1;
 }
 
+function removeQuotes(string) {
+    if (isQuote(string[0]) && isQuote(string.substr(-1))) {
+        return string.slice(1, -1);
+    } else {
+        return string;
+    }
+}
+
+function unescape(string) {
+    return string;
+}
+
 function transformArgument(arg, index) {
-    if (!arg || !index) {
-        return arg;
-    }
-    
-    arg = expandTilde(arg);
-    
-    if (isQuote(arg[0]) && isQuote(arg.substr(-1))) {
-        arg = arg.slice(1, -1);
-    }
-    
-    return arg;
+    return reverseCompose([
+        expandTilde,
+        removeQuotes,
+        unescape
+    ])(arg);
 }
 
 process.stdin.on('data', function (input) {
     var commandLine = input.toString(),
-        argv = commandLine.split(/\s+/).map(transformArgument),
+        matches = commandLine.match(/'.*'|".*"|((\\\s)*[^\s])+(\\\s)*/g),
+        argv = matches.map(transformArgument),
         commandHandler = commands[argv[0]];
+    
+    commandLine.match(/'.*'|".*"|((\\\s)*[^\s])+(\\\s)*/g);
     
     if (commandHandler) {
         commandHandler.call(process, argv, onComplete, onError);

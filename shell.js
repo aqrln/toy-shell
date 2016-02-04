@@ -78,7 +78,7 @@ function removeQuotes(string) {
 }
 
 function unescapeArgument(string) {
-    return string.replace('\\ ', ' ');
+    return string.replace(/\\\s/g, ' ');
 }
 
 function transformArgument(arg, index) {
